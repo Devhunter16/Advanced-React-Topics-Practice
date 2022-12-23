@@ -14,9 +14,17 @@ const Login = (props) => {
   // UseEffect is used to handle side-effects. We perform a side-effect when we need to reach outside of our React components to do something.
   // UseEffect runs only if enteredEmail, or enteredPassword changed in the last component re-render cycle, meaning that it will run for every keystroke in our forms
   useEffect(() => {
-    setFormIsValid(
-      enteredEmail.includes("@") && enteredPassword.trim().length > 6
-    );
+    const timeout = setTimeout(() => {
+      setFormIsValid(
+        enteredEmail.includes("@") && enteredPassword.trim().length > 6
+      );
+    }, 500);
+
+    // "cleanup function", essentially a function that runs before useEffect runs again
+    return () => {
+      // clearing the last timer so that we can set a new one next function execution
+      clearTimeout(timeout);
+    };
   }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
